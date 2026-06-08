@@ -212,3 +212,89 @@ Before pushing, check:
 [ ] I pushed my branch or agreed main commit.
 [ ] I opened a Pull Request if working on a branch.
 ```
+
+## Optional: same workflow with standard Git commands
+
+Linux users, or collaborators who prefer the terminal, can follow the same safe workflow with standard Git commands.
+
+Run these commands in a terminal from the repository root. In RStudio, use the **Terminal** tab, not the R Console.
+
+### Start from the newest version
+
+```bash
+git checkout main
+git pull
+```
+
+### Create a branch
+
+Use a short branch name that describes the task:
+
+```bash
+git checkout -b fix-readme-typo
+```
+
+### Edit and test
+
+Edit files in RStudio or another editor.
+
+For package changes, run:
+
+```bash
+Rscript -e "devtools::load_all(); testthat::test_dir('tests/testthat')"
+```
+
+### Review changes
+
+```bash
+git status
+git diff
+```
+
+Make sure only intended files changed.
+
+Do not commit local or generated files such as:
+
+- `.Rproj.user/`
+- `.Rhistory`
+- `.RData`
+- `.Ruserdata`
+- `.quarto/`
+- `AGENTS.md`
+- compiled artifacts such as `.dll`, `.so`, `.o`, `.obj`, `.lib`, and `.exe`
+
+### Commit the change
+
+Add only the files you intended to change:
+
+```bash
+git add README.md
+git commit -m "Fix typo in README"
+```
+
+For multiple files, list them explicitly:
+
+```bash
+git add README.md dev/github-desktop-workflow.md
+git commit -m "Update collaborator workflow"
+```
+
+### Push the branch
+
+```bash
+git push -u origin fix-readme-typo
+```
+
+Then open GitHub in a browser and create a Pull Request.
+
+### Do not use these commands unless you know exactly why
+
+Beginners should avoid:
+
+```bash
+git push --force
+git reset --hard
+git clean -fd
+```
+
+These commands can overwrite or delete work. Ask for help instead.
