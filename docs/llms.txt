@@ -43,6 +43,8 @@ It is not a scientifically complete breeding simulator.
 
 ## All functions
 
+- [`simulate_gene_drop()`](https://psoerensen.github.io/qgsim/reference/simulate_gene_drop.md)
+  : Simulate gene dropping through a pedigree
 - [`simulate_pedigree()`](https://psoerensen.github.io/qgsim/reference/simulate_pedigree.md)
   : Simulate a multi-generational pedigree
 
@@ -52,3 +54,8 @@ It is not a scientifically complete breeding simulator.
 
 - [Collaborator workflow with GitHub Desktop and
   RStudio](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.md):
+
+### Simulation guides
+
+- [Simple gene
+  dropping](https://psoerensen.github.io/qgsim/articles/gene-dropping.md):

@@ -1,0 +1,99 @@
+# Simple gene dropping
+
+Gene dropping follows alleles from a base population through a simulated
+pedigree. Each offspring receives one recombined haplotype from its sire
+and one from its dam. This provides a small teaching example of
+inheritance over multiple generations.
+
+## Base haplotypes
+
+[`simulate_gene_drop()`](https://psoerensen.github.io/qgsim/reference/simulate_gene_drop.md)
+represents a diploid base population with two matrices, `hap1` and
+`hap2`. Rows are individuals, columns are markers, and values are 0/1
+alleles.
+
+``` r
+library(qgsim)
+
+base_haplotypes <- list(
+  hap1 = matrix(
+    c(0, 0, 1, 1,
+      0, 1, 0, 1,
+      1, 0, 1, 0,
+      1, 1, 0, 0),
+    nrow = 4,
+    byrow = TRUE
+  ),
+  hap2 = matrix(
+    c(1, 1, 0, 0,
+      1, 0, 1, 0,
+      0, 1, 0, 1,
+      0, 0, 1, 1),
+    nrow = 4,
+    byrow = TRUE
+  )
+)
+
+map <- c(0, 0.2, 0.7, 1)
+```
+
+The map gives marker positions in Morgans on one chromosome. This first
+version models only a single chromosome.
+
+## Simulate and sample
+
+The base population is generation 0. Selected sires and dams from each
+generation produce the next generation. Crossovers are drawn from a
+Poisson distribution based on chromosome length, and crossover locations
+determine which parental haplotype is transmitted along the chromosome.
+
+``` r
+result <- simulate_gene_drop(
+  base_haplotypes = base_haplotypes,
+  map = map,
+  generations = 3,
+  population_size = 4,
+  selected_parents = 4,
+  offspring_per_mating = 2,
+  sample_size = 2,
+  seed = 123,
+  keep = "sample"
+)
+
+result
+```
+
+    ## <qgsim_gene_drop>
+    ##   generations: 3 
+    ##   pedigree individuals: 16 
+    ##   sampled individuals: 2 
+    ##   retained haplotypes: 2
+
+``` r
+result$sample
+```
+
+    ##         id generation haplotype_row
+    ## 1 g3_i0004          3             1
+    ## 2 g3_i0003          3             2
+
+``` r
+result$haplotypes$hap1
+```
+
+    ##      [,1] [,2] [,3] [,4]
+    ## [1,]    1    0    1    1
+    ## [2,]    1    1    1    1
+
+The pedigree always contains the base population and all simulated
+generations. With `keep = "sample"`, the haplotype matrices contain only
+the sampled final-generation individuals. With `keep = "all"`, they
+contain every individual in pedigree order. The `haplotype_row` column
+maps sampled IDs to the returned haplotype matrices.
+
+## Scope and future implementations
+
+This is a deliberately simple, single-chromosome R implementation for
+teaching. It does not represent a complete breeding simulator. A later
+backend could replace the internal `drop_gamete_r()` loop with compiled
+C++ or Fortran while preserving the user-facing result structure.

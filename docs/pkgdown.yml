@@ -2,8 +2,9 @@ pandoc: 3.6.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  gene-dropping: gene-dropping.html
   github-desktop-workflow: github-desktop-workflow.html
-last_built: 2026-06-08T18:43Z
+last_built: 2026-06-08T19:19Z
 urls:
   reference: https://psoerensen.github.io/qgsim/reference
   article: https://psoerensen.github.io/qgsim/articles
