@@ -302,23 +302,35 @@ and what GitHub Desktop or RStudio shows.</p>
 <div class="section level2">
 <h2 id="optional-same-workflow-with-standard-git-commands">Optional: same workflow with standard Git commands<a class="anchor" aria-label="anchor" href="#optional-same-workflow-with-standard-git-commands"></a>
 </h2>
-<p>Linux users, or collaborators who prefer the terminal, can follow the
-same safe workflow with standard Git commands.</p>
-<p>Run these commands in a terminal opened in your local
-<code>qgsim</code> repository folder.</p>
-<p>The local <code>qgsim</code> repository folder is the folder you
-cloned from GitHub. It is the top-level folder that contains files and
-folders such as:</p>
+<p>This section is for collaborators who want to edit <code>qgsim</code>
+and contribute changes using standard Git commands.</p>
+<p>If you only want to install and use <code>qgsim</code>, you do not
+need to clone the repository. Install it from the R Console instead:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"psoerensen/qgsim"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psoerensen.github.io/qgsim/">qgsim</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="clone-qgsim-on-linux-or-macos">Clone qgsim on Linux or macOS<a class="anchor" aria-label="anchor" href="#clone-qgsim-on-linux-or-macos"></a>
+</h3>
+<p>If you want to contribute to <code>qgsim</code>, first clone the
+repository.</p>
+<p>Open a terminal and run:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/GitHub</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="bu">cd</span> ~/GitHub</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/psoerensen/qgsim.git</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="bu">cd</span> qgsim</span></code></pre></div>
+<p>After <code>cd qgsim</code>, you are in the local <code>qgsim</code>
+repository folder. This is the folder where you should run Git
+commands.</p>
+<p>The local <code>qgsim</code> repository folder is the top-level
+folder that contains files and folders such as:</p>
 <pre class="text"><code>DESCRIPTION
 README.md
 qgsim.Rproj
 R/
 tests/
 vignettes/</code></pre>
-<p>For example, on Linux this might be:</p>
-<pre class="text"><code>~/GitHub/qgsim</code></pre>
-<p>On Windows this might be:</p>
-<pre class="text"><code>C:/Users/&lt;your-user-name&gt;/Documents/GitHub/qgsim</code></pre>
 <p>In RStudio, open <code>qgsim.Rproj</code> first. Then use the
 <strong>Terminal</strong> tab, not the R Console. The Terminal will
 usually start in the correct <code>qgsim</code> folder.</p>
@@ -327,6 +339,7 @@ usually start in the correct <code>qgsim</code> folder.</p>
 <p>On Windows PowerShell, you can also run:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">Get-Location</span></span></code></pre></div>
 <p>You should see a path ending in <code>qgsim</code>.</p>
+</div>
 <div class="section level3">
 <h3 id="start-from-the-newest-version">Start from the newest version<a class="anchor" aria-label="anchor" href="#start-from-the-newest-version"></a>
 </h3>

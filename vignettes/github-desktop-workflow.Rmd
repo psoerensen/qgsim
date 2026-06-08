@@ -214,11 +214,32 @@ Before pushing, check:
 
 ## Optional: same workflow with standard Git commands
 
-Linux users, or collaborators who prefer the terminal, can follow the same safe workflow with standard Git commands.
+This section is for collaborators who want to edit `qgsim` and contribute changes using standard Git commands.
 
-Run these commands in a terminal opened in your local `qgsim` repository folder.
+If you only want to install and use `qgsim`, you do not need to clone the repository. Install it from the R Console instead:
 
-The local `qgsim` repository folder is the folder you cloned from GitHub. It is the top-level folder that contains files and folders such as:
+```r
+install.packages("remotes")
+remotes::install_github("psoerensen/qgsim")
+library(qgsim)
+```
+
+### Clone qgsim on Linux or macOS
+
+If you want to contribute to `qgsim`, first clone the repository.
+
+Open a terminal and run:
+
+```bash
+mkdir -p ~/GitHub
+cd ~/GitHub
+git clone https://github.com/psoerensen/qgsim.git
+cd qgsim
+```
+
+After `cd qgsim`, you are in the local `qgsim` repository folder. This is the folder where you should run Git commands.
+
+The local `qgsim` repository folder is the top-level folder that contains files and folders such as:
 
 ```text
 DESCRIPTION
@@ -227,18 +248,6 @@ qgsim.Rproj
 R/
 tests/
 vignettes/
-```
-
-For example, on Linux this might be:
-
-```text
-~/GitHub/qgsim
-```
-
-On Windows this might be:
-
-```text
-C:/Users/<your-user-name>/Documents/GitHub/qgsim
 ```
 
 In RStudio, open `qgsim.Rproj` first. Then use the **Terminal** tab, not the R Console. The Terminal will usually start in the correct `qgsim` folder.
