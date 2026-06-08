@@ -40,6 +40,87 @@ map <- c(0, 0.2, 0.7, 1)
 The map gives marker positions in Morgans on one chromosome. This first
 version models only a single chromosome.
 
+## Drop one complete generation
+
+[`gene_drop_generation()`](https://psoerensen.github.io/qgsim/reference/gene_drop_generation.md)
+applies a supplied mating design to a parental population. The `sire`
+and `dam` vectors contain parental row indices, with one pair for each
+offspring. This makes the generation-level function useful when the
+mating design has already been selected by another part of a simulation.
+
+``` r
+generation <- gene_drop_generation(
+  hap1 = base_haplotypes$hap1,
+  hap2 = base_haplotypes$hap2,
+  sire = c(1, 2, 1, 4),
+  dam = c(3, 4, 2, 1),
+  map = map,
+  seed = 123,
+  engine = "R"
+)
+
+generation$genotype
+```
+
+    ##      [,1] [,2] [,3] [,4]
+    ## [1,]    1    0    0    1
+    ## [2,]    0    0    2    0
+    ## [3,]    1    0    1    0
+    ## [4,]    1    1    1    0
+
+``` r
+generation$hap1
+```
+
+    ##      [,1] [,2] [,3] [,4]
+    ## [1,]    0    0    0    0
+    ## [2,]    0    0    1    0
+    ## [3,]    0    0    0    0
+    ## [4,]    0    0    0    0
+
+``` r
+generation$hap2
+```
+
+    ##      [,1] [,2] [,3] [,4]
+    ## [1,]    1    0    0    1
+    ## [2,]    0    0    1    0
+    ## [3,]    1    0    1    0
+    ## [4,]    1    1    1    0
+
+For every offspring, the function creates one recombined gamete from the
+sire and one from the dam. Their sum is the offspring genotype, coded 0,
+1, or 2 at each marker.
+
+All random starting haplotypes, crossover counts, and crossover
+positions are generated in R before an engine is called. The R, C++, and
+Fortran engines therefore apply exactly the same deterministic
+inheritance events and can be compared directly.
+
+``` r
+engines <- lapply(c("R", "C++", "Fortran"), function(engine) {
+  gene_drop_generation(
+    base_haplotypes$hap1,
+    base_haplotypes$hap2,
+    sire = c(1, 2, 1, 4),
+    dam = c(3, 4, 2, 1),
+    map = map,
+    seed = 456,
+    engine = engine
+  )
+})
+
+identical(engines[[1]]$genotype, engines[[2]]$genotype)
+```
+
+    ## [1] TRUE
+
+``` r
+identical(engines[[1]]$genotype, engines[[3]]$genotype)
+```
+
+    ## [1] TRUE
+
 ## Simulate and sample
 
 The base population is generation 0. Selected sires and dams from each
@@ -91,9 +172,10 @@ the sampled final-generation individuals. With `keep = "all"`, they
 contain every individual in pedigree order. The `haplotype_row` column
 maps sampled IDs to the returned haplotype matrices.
 
-## Scope and future implementations
+## Scope
 
-This is a deliberately simple, single-chromosome R implementation for
-teaching. It does not represent a complete breeding simulator. A later
-backend could replace the internal `drop_gamete_r()` loop with compiled
-C++ or Fortran while preserving the user-facing result structure.
+These are deliberately simple, single-chromosome teaching examples. They
+do not represent a complete breeding simulator. The generation-level
+function demonstrates how the same inheritance calculation can be
+implemented in R, C++, and Fortran while preserving one user-facing
+result structure.

@@ -97,6 +97,71 @@ alleles.</p>
 first version models only a single chromosome.</p>
 </div>
 <div class="section level2">
+<h2 id="drop-one-complete-generation">Drop one complete generation<a class="anchor" aria-label="anchor" href="#drop-one-complete-generation"></a>
+</h2>
+<p><code><a href="../reference/gene_drop_generation.html">gene_drop_generation()</a></code> applies a supplied mating design
+to a parental population. The <code>sire</code> and <code>dam</code>
+vectors contain parental row indices, with one pair for each offspring.
+This makes the generation-level function useful when the mating design
+has already been selected by another part of a simulation.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">generation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gene_drop_generation.html">gene_drop_generation</a></span><span class="op">(</span></span>
+<span>  hap1 <span class="op">=</span> <span class="va">base_haplotypes</span><span class="op">$</span><span class="va">hap1</span>,</span>
+<span>  hap2 <span class="op">=</span> <span class="va">base_haplotypes</span><span class="op">$</span><span class="va">hap2</span>,</span>
+<span>  sire <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>  dam <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  map <span class="op">=</span> <span class="va">map</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  engine <span class="op">=</span> <span class="st">"R"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">generation</span><span class="op">$</span><span class="va">genotype</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3] [,4]</span></span>
+<span><span class="co">## [1,]    1    0    0    1</span></span>
+<span><span class="co">## [2,]    0    0    2    0</span></span>
+<span><span class="co">## [3,]    1    0    1    0</span></span>
+<span><span class="co">## [4,]    1    1    1    0</span></span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">generation</span><span class="op">$</span><span class="va">hap1</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3] [,4]</span></span>
+<span><span class="co">## [1,]    0    0    0    0</span></span>
+<span><span class="co">## [2,]    0    0    1    0</span></span>
+<span><span class="co">## [3,]    0    0    0    0</span></span>
+<span><span class="co">## [4,]    0    0    0    0</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">generation</span><span class="op">$</span><span class="va">hap2</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3] [,4]</span></span>
+<span><span class="co">## [1,]    1    0    0    1</span></span>
+<span><span class="co">## [2,]    0    0    1    0</span></span>
+<span><span class="co">## [3,]    1    0    1    0</span></span>
+<span><span class="co">## [4,]    1    1    1    0</span></span></code></pre>
+<p>For every offspring, the function creates one recombined gamete from
+the sire and one from the dam. Their sum is the offspring genotype,
+coded 0, 1, or 2 at each marker.</p>
+<p>All random starting haplotypes, crossover counts, and crossover
+positions are generated in R before an engine is called. The R, C++, and
+Fortran engines therefore apply exactly the same deterministic
+inheritance events and can be compared directly.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">engines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"C++"</span>, <span class="st">"Fortran"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">engine</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/gene_drop_generation.html">gene_drop_generation</a></span><span class="op">(</span></span>
+<span>    <span class="va">base_haplotypes</span><span class="op">$</span><span class="va">hap1</span>,</span>
+<span>    <span class="va">base_haplotypes</span><span class="op">$</span><span class="va">hap2</span>,</span>
+<span>    sire <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>    dam <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    map <span class="op">=</span> <span class="va">map</span>,</span>
+<span>    seed <span class="op">=</span> <span class="fl">456</span>,</span>
+<span>    engine <span class="op">=</span> <span class="va">engine</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">engines</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">genotype</span>, <span class="va">engines</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">genotype</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">engines</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">genotype</span>, <span class="va">engines</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">genotype</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+</div>
+<div class="section level2">
 <h2 id="simulate-and-sample">Simulate and sample<a class="anchor" aria-label="anchor" href="#simulate-and-sample"></a>
 </h2>
 <p>The base population is generation 0. Selected sires and dams from
@@ -104,7 +169,7 @@ each generation produce the next generation. Crossovers are drawn from a
 Poisson distribution based on chromosome length, and crossover locations
 determine which parental haplotype is transmitted along the
 chromosome.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_gene_drop.html">simulate_gene_drop</a></span><span class="op">(</span></span>
 <span>  base_haplotypes <span class="op">=</span> <span class="va">base_haplotypes</span>,</span>
 <span>  map <span class="op">=</span> <span class="va">map</span>,</span>
@@ -123,12 +188,12 @@ chromosome.</p>
 <span><span class="co">##   pedigree individuals: 16 </span></span>
 <span><span class="co">##   sampled individuals: 2 </span></span>
 <span><span class="co">##   retained haplotypes: 2</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span><span class="op">$</span><span class="va">sample</span></span></code></pre></div>
 <pre><code><span><span class="co">##         id generation haplotype_row</span></span>
 <span><span class="co">## 1 g3_i0004          3             1</span></span>
 <span><span class="co">## 2 g3_i0003          3             2</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span><span class="op">$</span><span class="va">haplotypes</span><span class="op">$</span><span class="va">hap1</span></span></code></pre></div>
 <pre><code><span><span class="co">##      [,1] [,2] [,3] [,4]</span></span>
 <span><span class="co">## [1,]    1    0    1    1</span></span>
@@ -141,13 +206,13 @@ order. The <code>haplotype_row</code> column maps sampled IDs to the
 returned haplotype matrices.</p>
 </div>
 <div class="section level2">
-<h2 id="scope-and-future-implementations">Scope and future implementations<a class="anchor" aria-label="anchor" href="#scope-and-future-implementations"></a>
+<h2 id="scope">Scope<a class="anchor" aria-label="anchor" href="#scope"></a>
 </h2>
-<p>This is a deliberately simple, single-chromosome R implementation for
-teaching. It does not represent a complete breeding simulator. A later
-backend could replace the internal <code>drop_gamete_r()</code> loop
-with compiled C++ or Fortran while preserving the user-facing result
-structure.</p>
+<p>These are deliberately simple, single-chromosome teaching examples.
+They do not represent a complete breeding simulator. The
+generation-level function demonstrates how the same inheritance
+calculation can be implemented in R, C++, and Fortran while preserving
+one user-facing result structure.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
