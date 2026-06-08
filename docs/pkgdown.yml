@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   github-desktop-workflow: github-desktop-workflow.html
   shared-library-backends: shared-library-backends.html
-last_built: 2026-06-08T12:30Z
+last_built: 2026-06-08T12:43Z
 urls:
   reference: https://psoerensen.github.io/qgsim/reference
   article: https://psoerensen.github.io/qgsim/articles

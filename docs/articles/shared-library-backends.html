@@ -63,24 +63,80 @@
 keeping the common workflow:</p>
 <pre class="text"><code>breeding_scheme() -&gt; qgsim_compile() -&gt; qgsim_validate()
                   -&gt; qgsim_run() -&gt; qgsim_result</code></pre>
-<p>The repository includes two small developer examples:</p>
+<p>The repository includes two small developer examples. Both keep the
+qgsim backend responsibilities separate:</p>
 <ul>
-<li><a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/README.md" class="external-link">C++
-shared-library backend</a></li>
-<li><a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/README.md" class="external-link">Fortran
-shared-library backend</a></li>
+<li>
+<code>translate()</code> converts a validated
+<code>qgsim_plan</code> to simple native input.</li>
+<li>
+<code>execute()</code> calls a function from a shared library.</li>
+<li>
+<code>collect()</code> converts the native output into a valid
+<code>qgsim_result</code>.</li>
 </ul>
-<p>Each example demonstrates the backend stages
-<code>translate()</code>, <code>execute()</code>, and
-<code>collect()</code>, calls a toy native function from a shared
-library, and converts the output into a valid
-<code>qgsim_result</code>.</p>
 <p>These examples are optional, compiler-dependent developer guidance.
 They are not scientifically complete simulators, are not built during
-qgsim installation, and are not required by the package test suite.
-Building them requires a compatible C++ or Fortran compiler configured
-for <code>R CMD SHLIB</code>.</p>
-  </main>
+qgsim installation, and are not required by the package test suite.</p>
+<div class="section level2">
+<h2 id="c-shared-library-backend">C++ shared-library backend<a class="anchor" aria-label="anchor" href="#c-shared-library-backend"></a>
+</h2>
+<p>The C++ example uses R’s <code><a href="https://rdrr.io/r/base/CallExternal.html" class="external-link">.Call()</a></code> interface. Its native
+function receives a numeric vector and adds a generation-specific
+increment. The accompanying R script builds a qgsim backend around that
+toy function and runs it through <code><a href="../reference/qgsim_run.html">qgsim_run()</a></code>.</p>
+<p>Source files:</p>
+<ul>
+<li>
+<a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/qgsim_cpp_example.cpp" class="external-link"><code>qgsim_cpp_example.cpp</code></a>:
+the native C++ function.</li>
+<li>
+<a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/build.R" class="external-link"><code>build.R</code></a>:
+builds the shared library with <code>R CMD SHLIB</code>.</li>
+<li>
+<a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/test_cpp_backend.R" class="external-link"><code>test_cpp_backend.R</code></a>:
+loads the library, registers the example backend, and runs a small
+plan.</li>
+</ul>
+<p>From <code>inst/examples/cpp_backend/</code>, build and run it
+with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">Rscript</span> build.R</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">Rscript</span> test_cpp_backend.R</span></code></pre></div>
+<p>Building requires a C++ compiler configured for R.</p>
+</div>
+<div class="section level2">
+<h2 id="fortran-shared-library-backend">Fortran shared-library backend<a class="anchor" aria-label="anchor" href="#fortran-shared-library-backend"></a>
+</h2>
+<p>The Fortran example uses R’s <code><a href="https://rdrr.io/r/base/Foreign.html" class="external-link">.Fortran()</a></code> interface. Its
+native subroutine updates a numeric vector by adding a
+generation-specific increment. The accompanying R script keeps the same
+<code>translate()</code>, <code>execute()</code>, and
+<code>collect()</code> structure as the C++ example.</p>
+<p>Source files:</p>
+<ul>
+<li>
+<a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/qgsim_fortran_example.f90" class="external-link"><code>qgsim_fortran_example.f90</code></a>:
+the native Fortran subroutine.</li>
+<li>
+<a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/build.R" class="external-link"><code>build.R</code></a>:
+builds the shared library with <code>R CMD SHLIB</code>.</li>
+<li>
+<a href="https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/test_fortran_backend.R" class="external-link"><code>test_fortran_backend.R</code></a>:
+loads the library, registers the example backend, and runs a small
+plan.</li>
+</ul>
+<p>From <code>inst/examples/fortran_backend/</code>, build and run it
+with:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">Rscript</span> build.R</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">Rscript</span> test_fortran_backend.R</span></code></pre></div>
+<p>Building requires a Fortran compiler configured for R.</p>
+<p>The scripts use qgsim’s internal strict backend and result
+constructors because those constructors are not currently part of the
+public API. A production backend package should pin compatible qgsim
+versions and keep this adapter code isolated.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

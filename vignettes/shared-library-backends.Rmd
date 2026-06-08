@@ -10,16 +10,68 @@ breeding_scheme() -> qgsim_compile() -> qgsim_validate()
                   -> qgsim_run() -> qgsim_result
 ```
 
-The repository includes two small developer examples:
+The repository includes two small developer examples. Both keep the qgsim
+backend responsibilities separate:
 
-- [C++ shared-library backend](https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/README.md)
-- [Fortran shared-library backend](https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/README.md)
-
-Each example demonstrates the backend stages `translate()`, `execute()`, and
-`collect()`, calls a toy native function from a shared library, and converts
-the output into a valid `qgsim_result`.
+- `translate()` converts a validated `qgsim_plan` to simple native input.
+- `execute()` calls a function from a shared library.
+- `collect()` converts the native output into a valid `qgsim_result`.
 
 These examples are optional, compiler-dependent developer guidance. They are
 not scientifically complete simulators, are not built during qgsim
-installation, and are not required by the package test suite. Building them
-requires a compatible C++ or Fortran compiler configured for `R CMD SHLIB`.
+installation, and are not required by the package test suite.
+
+## C++ shared-library backend
+
+The C++ example uses R's `.Call()` interface. Its native function receives a
+numeric vector and adds a generation-specific increment. The accompanying R
+script builds a qgsim backend around that toy function and runs it through
+`qgsim_run()`.
+
+Source files:
+
+- [`qgsim_cpp_example.cpp`](https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/qgsim_cpp_example.cpp):
+  the native C++ function.
+- [`build.R`](https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/build.R):
+  builds the shared library with `R CMD SHLIB`.
+- [`test_cpp_backend.R`](https://github.com/psoerensen/qgsim/blob/main/inst/examples/cpp_backend/test_cpp_backend.R):
+  loads the library, registers the example backend, and runs a small plan.
+
+From `inst/examples/cpp_backend/`, build and run it with:
+
+```bash
+Rscript build.R
+Rscript test_cpp_backend.R
+```
+
+Building requires a C++ compiler configured for R.
+
+## Fortran shared-library backend
+
+The Fortran example uses R's `.Fortran()` interface. Its native subroutine
+updates a numeric vector by adding a generation-specific increment. The
+accompanying R script keeps the same `translate()`, `execute()`, and
+`collect()` structure as the C++ example.
+
+Source files:
+
+- [`qgsim_fortran_example.f90`](https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/qgsim_fortran_example.f90):
+  the native Fortran subroutine.
+- [`build.R`](https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/build.R):
+  builds the shared library with `R CMD SHLIB`.
+- [`test_fortran_backend.R`](https://github.com/psoerensen/qgsim/blob/main/inst/examples/fortran_backend/test_fortran_backend.R):
+  loads the library, registers the example backend, and runs a small plan.
+
+From `inst/examples/fortran_backend/`, build and run it with:
+
+```bash
+Rscript build.R
+Rscript test_fortran_backend.R
+```
+
+Building requires a Fortran compiler configured for R.
+
+The scripts use qgsim's internal strict backend and result constructors because
+those constructors are not currently part of the public API. A production
+backend package should pin compatible qgsim versions and keep this adapter code
+isolated.
