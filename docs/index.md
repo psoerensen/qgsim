@@ -61,5 +61,5 @@ tests.
 
 Collaborators who prefer GitHub Desktop and RStudio can follow the
 [GitHub Desktop collaborator
-workflow](https://psoerensen.github.io/qgsim/vignettes/articles/github-desktop-workflow.Rmd),
+workflow](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html),
 which is also published with the pkgdown articles.
