@@ -1,0 +1,23 @@
+destination: docs
+url: https://psoerensen.github.io/qgsim/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/psoerensen/qgsim
+      aria-label: GitHub repository
+
+articles:
+- title: Collaborator guides
+  contents:
+  - articles/github-desktop-workflow
+- title: Developer guides
+  contents:
+  - articles/shared-library-backends

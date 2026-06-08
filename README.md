@@ -55,4 +55,5 @@ These are developer guidance only. They are not installed backends, are not
 scientifically complete simulators, and are not required by package tests.
 
 Collaborators who prefer GitHub Desktop and RStudio can follow the
-[GitHub Desktop collaborator workflow](dev/github-desktop-workflow.md).
+[GitHub Desktop collaborator workflow](vignettes/articles/github-desktop-workflow.Rmd),
+which is also published with the pkgdown articles.
