@@ -41,3 +41,15 @@ breeding_scheme() -> qgsim_compile() -> qgsim_validate()
 
 Future backend packages can translate the same validated plan for C++, Fortran,
 Python, or Julia implementations while returning the same result schema.
+
+## Developer examples
+
+Optional, compiler-dependent examples show how a backend can call a small
+shared library while preserving the `translate()`, `execute()`, and `collect()`
+stages:
+
+- [C++ shared-library backend](inst/examples/cpp_backend/README.md)
+- [Fortran shared-library backend](inst/examples/fortran_backend/README.md)
+
+These are developer guidance only. They are not installed backends, are not
+scientifically complete simulators, and are not required by package tests.
