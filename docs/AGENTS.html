@@ -36,21 +36,59 @@
 
 <div class="section level2">
 <h2 id="project-purpose">Project purpose<a class="anchor" aria-label="anchor" href="#project-purpose"></a></h2>
-<p>This repository contains <code>qgsim</code>, an R package for specifying, validating, running, and comparing breeding-scheme simulations through a common R interface.</p>
-<p>The package is intended as an orchestration layer for simulation tools implemented in R, C++, Fortran, Python, Julia, or other languages. It should not reimplement all simulators in R. Instead, it should provide a common specification, validation layer, backend contract, and standardized result format.</p>
+<p>This repository contains <code>qgsim</code>, a small R teaching package for quantitative genetics and breeding-simulation examples.</p>
+<p>The package currently focuses on two ideas:</p>
+<ol style="list-style-type: decimal"><li>Simulating simple multi-generational pedigrees.</li>
+<li>Demonstrating gene dropping from parental haplotypes using interchangeable R, C++, and Fortran implementations.</li>
+</ol><p>The package is intentionally small and educational. Do not describe it as a complete production breeding simulator.</p>
+</div>
+<div class="section level2">
+<h2 id="current-exported-functionality">Current exported functionality<a class="anchor" aria-label="anchor" href="#current-exported-functionality"></a></h2>
+<p>The current main user-facing functions are:</p>
+<ul><li><code><a href="reference/simulate_pedigree.html">simulate_pedigree()</a></code></li>
+<li><code><a href="reference/gene_drop_generation.html">gene_drop_generation()</a></code></li>
+</ul><div class="section level3">
+<h3 id="simulate_pedigree"><code>simulate_pedigree()</code><a class="anchor" aria-label="anchor" href="#simulate_pedigree"></a></h3>
+<p><code><a href="reference/simulate_pedigree.html">simulate_pedigree()</a></code> simulates a simple multi-generational pedigree.</p>
+<p>It returns a data frame with:</p>
+<ul><li><code>id</code></li>
+<li><code>sire</code></li>
+<li><code>dam</code></li>
+<li><code>generation</code></li>
+<li><code>sex</code></li>
+</ul><p>Founder parents are represented by <code>NA</code>.</p>
+</div>
+<div class="section level3">
+<h3 id="gene_drop_generation"><code>gene_drop_generation()</code><a class="anchor" aria-label="anchor" href="#gene_drop_generation"></a></h3>
+<p><code><a href="reference/gene_drop_generation.html">gene_drop_generation()</a></code> simulates marker inheritance for one generation from parental haplotypes and a mating design.</p>
+<p>It supports:</p>
+<ul><li><code>engine = "R"</code></li>
+<li><code>engine = "C++"</code></li>
+<li><code>engine = "Fortran"</code></li>
+</ul><p>The R code handles validation, random event generation, and the user-facing interface.</p>
+<p>The C++ and Fortran code implement the deterministic marker-level inheritance loop.</p>
+<p>For the same seed, the R, C++, and Fortran engines should produce identical outputs.</p>
+<p>The implementation is a simple single-chromosome teaching example. It is not a full production gene-dropping simulator.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="repository-type">Repository type<a class="anchor" aria-label="anchor" href="#repository-type"></a></h2>
 <p>This is an R package repository.</p>
 <p>Typical content includes:</p>
 <ul><li>
-<code>R/</code>: R source code</li>
+<code>R/</code>: R source code and wrappers</li>
+<li>
+<code>src/</code>: C++/Fortran/C native code</li>
 <li>
 <code>tests/testthat/</code>: package tests</li>
 <li>
 <code>man/</code>: generated roxygen documentation</li>
 <li>
-<code>README.md</code> / <code>README.Rmd</code>: package overview and examples</li>
+<code>vignettes/</code>: long-form tutorials and collaborator guides</li>
+<li>
+<code>docs/</code>: generated pkgdown website output</li>
+<li>
+<code>README.md</code>: package overview</li>
 <li>
 <code>DESCRIPTION</code>: package metadata and dependencies</li>
 <li>
@@ -69,13 +107,14 @@
 <li>Show the diff after edits.</li>
 <li>Do not delete files unless explicitly asked.</li>
 <li>Do not push to GitHub unless explicitly asked.</li>
+<li>Do not create or modify remotes.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="r-package-rules">R package rules<a class="anchor" aria-label="anchor" href="#r-package-rules"></a></h2>
 <ul><li>Preserve valid R package structure.</li>
 <li>Do not edit <code>NAMESPACE</code> or <code>man/</code> by hand unless explicitly asked.</li>
 <li>Use roxygen comments for documentation updates.</li>
-<li>Run <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> only when documentation changes require it.</li>
+<li>Run <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> when roxygen documentation or exports change.</li>
 <li>Keep exported API changes deliberate and documented.</li>
 <li>Avoid adding new dependencies unless clearly justified.</li>
 <li>If adding dependencies, update <code>DESCRIPTION</code> and explain why.</li>
@@ -83,81 +122,93 @@
 <li>Keep examples small and reproducible.</li>
 </ul></div>
 <div class="section level2">
-<h2 id="qgsim-architecture-rules">qgsim architecture rules<a class="anchor" aria-label="anchor" href="#qgsim-architecture-rules"></a></h2>
-<p>Preserve the explicit workflow:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">breeding_scheme</span><span class="op">(</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="fu">qgsim_compile</span><span class="op">(</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="fu">qgsim_validate</span><span class="op">(</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="fu">qgsim_run</span><span class="op">(</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">qgsim_result</span></span></code></pre></div>
-<p>Important design principles:</p>
-<ul><li>Separate specification from execution.</li>
-<li>
-<code>qgsim_run()</code> should accept a compiled <code>qgsim_plan</code>.</li>
-<li>Avoid overlapping orchestration APIs.</li>
-<li>Keep <code>qgsim_plan</code> backend-neutral.</li>
-<li>Do not add backend-specific fields to the common plan.</li>
-<li>Validate individual descriptors and complete plans.</li>
-<li>Keep backend contracts explicit and testable.</li>
-<li>Standardize all backend outputs into <code>qgsim_result</code>.</li>
-<li>Do not wrap unconstrained backend-native output as a public result.</li>
-<li>Keep schema versions explicit.</li>
-<li>Preserve deterministic behavior for seeded reference-backend tests.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="backend-rules">Backend rules<a class="anchor" aria-label="anchor" href="#backend-rules"></a></h2>
-<p>Backends should follow the contract:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">available</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">translate</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">execute</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">collect</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Responsibilities:</p>
-<ul><li>
-<code>available()</code> checks whether the backend can run.</li>
-<li>
-<code>translate()</code> converts a <code>qgsim_plan</code> to backend-native input.</li>
-<li>
-<code>execute()</code> runs the backend.</li>
-<li>
-<code>collect()</code> converts backend-native output into a valid <code>qgsim_result</code>.</li>
-</ul><p>Do not mix backend discovery, translation, execution, and result collection in one function.</p>
-<p>For external C++/Fortran/Python/Julia tools:</p>
-<ul><li>Prefer file-based or JSON-based exchange formats.</li>
-<li>Keep backend-specific artifacts referenced through result files/provenance.</li>
-<li>Do not require external tools for core package tests.</li>
-<li>Add backend contract tests before adding real external integrations.</li>
+<h2 id="native-code-rules">Native-code rules<a class="anchor" aria-label="anchor" href="#native-code-rules"></a></h2>
+<p>The package now contains compiled-code examples under <code>src/</code>.</p>
+<p>Native code currently supports the C++ and Fortran engines in <code><a href="reference/gene_drop_generation.html">gene_drop_generation()</a></code>.</p>
+<p>When modifying native code:</p>
+<ul><li>Be conservative.</li>
+<li>Keep the R, C++, and Fortran engines numerically consistent.</li>
+<li>Do not generate random numbers inside C++ or Fortran.</li>
+<li>Random events should be generated in R and passed to compiled code.</li>
+<li>C++ and Fortran should implement deterministic marker-level inheritance loops.</li>
+<li>Preserve native routine registration in <code>src/init.c</code>.</li>
+<li>Do not change <code><a href="https://rdrr.io/r/base/CallExternal.html" class="external-link">.Call()</a></code> or <code><a href="https://rdrr.io/r/base/Foreign.html" class="external-link">.Fortran()</a></code> interfaces without updating R wrappers and tests.</li>
+<li>Do not add OpenMP or external shared-library machinery unless explicitly asked.</li>
+<li>Do not commit generated native artifacts such as <code>.o</code>, <code>.obj</code>, <code>.dll</code>, <code>.so</code>, <code>.dylib</code>, <code>.lib</code>, or <code>.exe</code>.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="testing-rules">Testing rules<a class="anchor" aria-label="anchor" href="#testing-rules"></a></h2>
 <p>Use the smallest relevant check for the change.</p>
 <p>Common checks:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>For focused tests:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-file-name.R"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-simulate-pedigree.R"</span><span class="op">)</span></span>
+<span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-gene-drop-generation.R"</span><span class="op">)</span></span></code></pre></div>
+<p>For command-line checks:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Rscript <span class="sc">-</span>e <span class="st">"devtools::load_all(); testthat::test_dir('tests/testthat')"</span></span></code></pre></div>
 <p>For documentation changes:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>For the current minimal package, useful checks include:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>Rscript <span class="sc">-</span>e <span class="st">"devtools::load_all(); testthat::test_dir('tests/testthat')"</span></span></code></pre></div>
-<p>Ask before running long checks or adding heavy external dependencies.</p>
+<p>For package website changes:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Ask before running long checks such as full <code>R CMD check</code>, unless explicitly requested.</p>
 </div>
 <div class="section level2">
-<h2 id="simulation-and-scientific-rules">Simulation and scientific rules<a class="anchor" aria-label="anchor" href="#simulation-and-scientific-rules"></a></h2>
-<ul><li>The current <code>r_reference</code> backend is for validating architecture, not for scientific conclusions.</li>
-<li>Do not describe the reference backend as a complete breeding-scheme simulator.</li>
-<li>Do not invent simulation results, benchmarking claims, or biological interpretations.</li>
-<li>Keep examples clearly labelled as minimal or illustrative.</li>
-<li>Preserve reproducibility for seed-based tests.</li>
-<li>Add scientific realism incrementally and with tests.</li>
+<h2 id="documentation-rules">Documentation rules<a class="anchor" aria-label="anchor" href="#documentation-rules"></a></h2>
+<p>Use this convention:</p>
+<ul><li>
+<code>README.md</code>: short package overview and links</li>
+<li>
+<code>man/</code>: generated function documentation</li>
+<li>
+<code>vignettes/</code>: tutorial/article source files</li>
+<li>
+<code>docs/</code>: generated pkgdown website output</li>
+</ul><p>Edit tutorial sources in <code>vignettes/</code>.</p>
+<p>Do not edit generated files under <code>docs/</code> manually.</p>
+<p>When pkgdown documentation changes, rebuild the site with:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Keep documentation aligned with implemented functionality.</p>
+<p>Do not document old or removed APIs such as:</p>
+<ul><li><code>breeding_scheme()</code></li>
+<li><code>qgsim_compile()</code></li>
+<li><code>qgsim_run()</code></li>
+<li><code>qgsim_result</code></li>
+<li>backend registries</li>
+</ul><p>unless they are clearly described as removed or future ideas.</p>
+</div>
+<div class="section level2">
+<h2 id="scientific-and-modelling-rules">Scientific and modelling rules<a class="anchor" aria-label="anchor" href="#scientific-and-modelling-rules"></a></h2>
+<ul><li>Do not invent simulation results, benchmarking claims, or performance claims.</li>
+<li>Do not describe <code>qgsim</code> as a complete breeding-scheme simulator.</li>
+<li>State clearly when examples are simplified teaching examples.</li>
+<li>
+<code><a href="reference/simulate_pedigree.html">simulate_pedigree()</a></code> is a simple random pedigree simulation.</li>
+<li>
+<code><a href="reference/gene_drop_generation.html">gene_drop_generation()</a></code> is a simple single-chromosome gene-dropping implementation.</li>
+<li>Avoid adding biological complexity without tests and clear documentation.</li>
+<li>Keep terminology consistent: pedigree, sire, dam, generation, haplotype, genotype, map, recombination.</li>
 </ul></div>
 <div class="section level2">
-<h2 id="documentation-rules">Documentation rules<a class="anchor" aria-label="anchor" href="#documentation-rules"></a></h2>
-<ul><li>README examples should run with the minimal installed package.</li>
-<li>Clearly distinguish implemented features from planned backends.</li>
-<li>Mention that external tool integration is future/extension work unless implemented.</li>
-<li>Keep documentation concise and practical.</li>
-</ul></div>
+<h2 id="git-and-generated-file-rules">Git and generated-file rules<a class="anchor" aria-label="anchor" href="#git-and-generated-file-rules"></a></h2>
+<p>Before reporting back, check:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--short</span></span></code></pre></div>
+<p>Generated or local files that should not be committed include:</p>
+<ul><li><code>.Rproj.user/</code></li>
+<li><code>.Rhistory</code></li>
+<li><code>.RData</code></li>
+<li><code>.Ruserdata</code></li>
+<li><code>.quarto/</code></li>
+<li><code>AGENTS.md</code></li>
+<li>native build artifacts such as <code>.o</code>, <code>.obj</code>, <code>.dll</code>, <code>.so</code>, <code>.dylib</code>, <code>.lib</code>, <code>.exe</code>
+</li>
+</ul><p>If native build artifacts appear after <code><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">devtools::load_all()</a></code>, report them and ask before deleting unless the user explicitly requested cleanup.</p>
+</div>
 <div class="section level2">
 <h2 id="preferred-response-style">Preferred response style<a class="anchor" aria-label="anchor" href="#preferred-response-style"></a></h2>
 <p>When reporting back:</p>

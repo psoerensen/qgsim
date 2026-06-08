@@ -73,10 +73,53 @@
 <p>The result is one data frame with individual IDs, parents, generation, and sex. Generation 1 contains founders with missing parents. Each later generation is produced from selected males and females in the previous generation.</p>
 </div>
 <div class="section level2">
+<h2 id="gene-dropping-with-r-c-and-fortran-engines">Gene dropping with R, C++, and Fortran engines<a class="anchor" aria-label="anchor" href="#gene-dropping-with-r-c-and-fortran-engines"></a>
+</h2>
+<p><code><a href="reference/gene_drop_generation.html">gene_drop_generation()</a></code> simulates recombination and marker inheritance for one generation from parental haplotypes and sire/dam row indices.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psoerensen.github.io/qgsim/">qgsim</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">hap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, <span class="fl">10</span> <span class="op">*</span> <span class="fl">20</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">hap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, <span class="fl">10</span> <span class="op">*</span> <span class="fl">20</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sire</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">dam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_drop_generation.html">gene_drop_generation</a></span><span class="op">(</span></span>
+<span>  hap1 <span class="op">=</span> <span class="va">hap1</span>,</span>
+<span>  hap2 <span class="op">=</span> <span class="va">hap2</span>,</span>
+<span>  sire <span class="op">=</span> <span class="va">sire</span>,</span>
+<span>  dam <span class="op">=</span> <span class="va">dam</span>,</span>
+<span>  map <span class="op">=</span> <span class="va">map</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  engine <span class="op">=</span> <span class="st">"C++"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">gr</span><span class="op">$</span><span class="va">genotype</span><span class="op">)</span></span></code></pre></div>
+<p>The same call can use any supported engine:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gr_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_drop_generation.html">gene_drop_generation</a></span><span class="op">(</span><span class="va">...</span>, engine <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span></span>
+<span><span class="va">gr_cpp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_drop_generation.html">gene_drop_generation</a></span><span class="op">(</span><span class="va">...</span>, engine <span class="op">=</span> <span class="st">"C++"</span><span class="op">)</span></span>
+<span><span class="va">gr_fortran</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_drop_generation.html">gene_drop_generation</a></span><span class="op">(</span><span class="va">...</span>, engine <span class="op">=</span> <span class="st">"Fortran"</span><span class="op">)</span></span></code></pre></div>
+<p>R handles validation, random-event generation, and the user-facing interface. C++ and Fortran apply the deterministic marker-level inheritance loop. For the same seed, the engines are tested to produce identical outputs.</p>
+<p>Implementation files:</p>
+<ul>
+<li><a href="https://github.com/psoerensen/qgsim/blob/main/R/gene-drop-generation.R" class="external-link">R wrapper and validation</a></li>
+<li><a href="https://github.com/psoerensen/qgsim/blob/main/src/gene_drop.cpp" class="external-link">C++ implementation</a></li>
+<li><a href="https://github.com/psoerensen/qgsim/blob/main/src/gene_drop_fortran.f90" class="external-link">Fortran implementation</a></li>
+<li><a href="https://github.com/psoerensen/qgsim/blob/main/src/init.c" class="external-link">Native routine registration</a></li>
+<li><a href="https://github.com/psoerensen/qgsim/blob/main/tests/testthat/test-gene-drop-generation.R" class="external-link">Cross-engine tests</a></li>
+</ul>
+<p>This is a simple single-chromosome teaching example that illustrates compiled-code integration in an R package, not a complete production breeding simulator. See the <a href="https://psoerensen.github.io/qgsim/articles/gene-dropping.html">gene-dropping article</a> for more detail.</p>
+</div>
+<div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <ul>
 <li><a href="https://psoerensen.github.io/qgsim/">Package website</a></li>
+<li><a href="https://psoerensen.github.io/qgsim/articles/gene-dropping.html">Gene-dropping article</a></li>
 <li><a href="https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html">GitHub Desktop collaborator workflow</a></li>
 </ul>
 <p>This implementation is intentionally simple and intended for teaching. It is not a scientifically complete breeding simulator.</p>
