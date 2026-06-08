@@ -1,14 +1,14 @@
 # Collaborator workflow with GitHub Desktop and RStudio
 
-This tutorial is for collaborators making small changes to qgsim with RStudio
-and GitHub Desktop. You do not need to know Git commands for the usual workflow.
+This tutorial is for collaborators making small changes to `qgsim` with RStudio and GitHub Desktop. You do not need to know Git commands for the usual workflow.
 
 ## Safe workflow
 
-**Pull -> edit -> test -> review changes -> commit -> push**
+**Pull -> create branch -> edit -> test -> review changes -> commit -> push -> pull request**
 
-Following these steps in order reduces the chance of losing work or creating
-conflicts with changes made by another collaborator.
+Following these steps in order reduces the chance of losing work or creating conflicts with changes made by another collaborator.
+
+For very small changes that have been agreed in advance, a maintainer may say that it is okay to commit directly to `main`. Otherwise, use a branch.
 
 ## 1. Clone qgsim with GitHub Desktop
 
@@ -16,7 +16,7 @@ You only need to clone the repository once.
 
 1. Open GitHub Desktop and sign in to GitHub if needed.
 2. Select **File > Clone repository**.
-3. Find and select the qgsim repository.
+3. Find and select the `qgsim` repository.
 4. Choose a local folder where you want to keep the project.
 5. Select **Clone**.
 
@@ -28,35 +28,46 @@ After cloning, GitHub Desktop shows the repository and its current files.
 2. Double-click `qgsim.Rproj`.
 3. Confirm that RStudio opens with `qgsim` shown as the active project.
 
-Always open `qgsim.Rproj` before working. This helps RStudio use the correct
-project folder.
+Always open `qgsim.Rproj` before working. This helps RStudio use the correct project folder.
 
 ## 3. Pull before starting work
 
 Before editing anything:
 
-1. Open the qgsim repository in GitHub Desktop.
+1. Open the `qgsim` repository in GitHub Desktop.
 2. Select **Fetch origin**.
 3. If GitHub Desktop shows **Pull origin**, select it.
 
-Pulling downloads changes that other collaborators have already pushed. Pull
-again if you have left the project open for a long time before starting work.
+Pulling downloads changes that other collaborators have already pushed. Pull again if you have left the project open for a long time before starting work.
 
-## 4. Make a small change
+## 4. Create a branch for most changes
 
-Open the file in RStudio, make one focused change, and save it. For example,
-correct a typo or clarify a short paragraph.
+In the beginning, collaborators should avoid committing directly to `main` unless the change is very small and agreed in advance.
 
-Keep unrelated changes separate. A small commit is easier to review and easier
-to fix if something goes wrong.
+For most changes, create a new branch in GitHub Desktop:
 
-Do not edit generated files such as `NAMESPACE` or files under `man/` by hand.
-Ask for help if your change appears to require those files.
+1. Open GitHub Desktop.
+2. Select **Branch > New Branch**.
+3. Use a short descriptive name, for example:
 
-## 5. Run basic checks in RStudio
+   * `fix-readme-typo`
+   * `add-cpp-backend-notes`
+   * `update-reference-example`
+4. Confirm that GitHub Desktop now shows your new branch instead of `main`.
 
-For a small documentation-only change, read the changed section in RStudio and
-check that links, spelling, and formatting look correct.
+A branch gives you a safe place to work without changing the shared `main` version immediately.
+
+## 5. Make a small change
+
+Open the file in RStudio, make one focused change, and save it. For example, correct a typo or clarify a short paragraph.
+
+Keep unrelated changes separate. A small commit is easier to review and easier to fix if something goes wrong.
+
+Do not edit generated files such as `NAMESPACE` or files under `man/` by hand. Ask for help if your change appears to require those files.
+
+## 6. Run basic checks in RStudio
+
+For a small documentation-only change, read the changed section in RStudio and check that links, spelling, and formatting look correct.
 
 For package changes, run these commands in the **RStudio Console**:
 
@@ -65,14 +76,11 @@ devtools::load_all()
 testthat::test_dir("tests/testthat")
 ```
 
-The checks should finish without failures. Copy the error message and ask for
-help if a check fails and the cause is unclear.
+The checks should finish without failures. Copy the error message and ask for help if a check fails and the cause is unclear.
 
-When a terminal command is specifically needed, run it in RStudio's
-**Terminal** tab, not in the R Console. Most collaborators will not need
-terminal commands for the workflow in this tutorial.
+When a terminal command is specifically needed, run it in RStudio's **Terminal** tab, not in the R Console. Most collaborators will not need terminal commands for the workflow in this tutorial.
 
-## 6. Review changed files in GitHub Desktop
+## 7. Review changed files in GitHub Desktop
 
 Return to GitHub Desktop after saving and testing.
 
@@ -85,53 +93,74 @@ Stop and ask for help if a file appears that you did not intentionally change.
 
 Do not commit these local or generated files:
 
-- `.Rproj.user/`
-- `.Rhistory`
-- `.RData`
-- `.Ruserdata`
-- `.quarto/`
-- `AGENTS.md`
-- Compiled artifacts such as `.dll`, `.so`, `.o`, and `.exe`
+* `.Rproj.user/`
+* `.Rhistory`
+* `.RData`
+* `.Ruserdata`
+* `.quarto/`
+* `AGENTS.md`
+* compiled artifacts such as `.dll`, `.so`, `.o`, `.obj`, `.lib`, and `.exe`
 
-## 7. Write a good commit message
+## 8. Write a good commit message
 
-Use a short summary that says what changed. Start with an action word and be
-specific.
+Use a short summary that says what changed. Start with an action word and be specific.
 
 Good examples:
 
-- `Fix typo in backend documentation`
-- `Clarify installation instructions`
-- `Add test for plan validation`
+* `Fix typo in backend documentation`
+* `Clarify installation instructions`
+* `Add test for plan validation`
 
 Avoid vague messages such as `changes`, `update`, or `fix`.
 
-## 8. Commit small changes to main
+## 9. Commit your change to the branch
 
-For an agreed, small change:
+For an agreed, focused change:
 
-1. Confirm that GitHub Desktop shows the **main** branch.
+1. Confirm that GitHub Desktop shows your branch, not `main`.
 2. Review the selected files one final time.
 3. Enter the commit message in the **Summary** box.
-4. Select **Commit to main**.
+4. Select **Commit to `<your-branch-name>`**.
 
-Committing records the change on your computer. It does not send the change to
-GitHub yet.
+Committing records the change on your computer. It does not send the change to GitHub yet.
 
-Ask before committing if the change is large, changes package behavior, adds a
-dependency, affects several unrelated files, or was not previously agreed.
+Ask before committing if the change is large, changes package behavior, adds a dependency, affects several unrelated files, or was not previously agreed.
 
-## 9. Push changes to GitHub
+## 10. Push your branch and open a pull request
 
-After committing:
+After committing your change:
 
 1. Select **Push origin** in GitHub Desktop.
-2. Wait for the push to finish.
-3. Check the repository on GitHub if you want to confirm that the commit is
-   visible.
+2. GitHub Desktop may show a button to create a Pull Request.
+3. If not, open the repository on GitHub.
+4. Select **Compare & pull request**.
+5. Add a short description of what you changed and what checks you ran.
+6. Create the Pull Request.
 
-If GitHub Desktop says the remote repository has newer changes, pull first,
-review the result, and then push again.
+A Pull Request lets others review the change before it becomes part of `main`.
+
+## Optional: commit very small agreed changes directly to main
+
+Sometimes a maintainer may say that a very small change can be committed directly to `main`.
+
+Examples might include:
+
+* fixing a typo
+* correcting a broken link
+* clarifying a short README sentence
+
+For an agreed direct-to-main change:
+
+1. Confirm that GitHub Desktop shows the **main** branch.
+2. Pull before editing.
+3. Make the small change.
+4. Run the relevant check.
+5. Review the changed files.
+6. Enter a clear commit message.
+7. Select **Commit to main**.
+8. Select **Push origin**.
+
+Do not commit directly to `main` for larger changes, package behavior changes, new dependencies, generated documentation changes, or compiled-code changes unless explicitly agreed.
 
 ## If GitHub Desktop reports conflicts
 
@@ -142,18 +171,44 @@ Do not guess, delete files, or choose **Discard changes**.
 3. Take a screenshot or copy the conflict message.
 4. Ask a maintainer or experienced collaborator for help.
 
-A conflict means that your work and another collaborator's work changed the
-same part of a file. Both changes may be important.
+A conflict means that your work and another collaborator's work changed the same part of a file. Both changes may be important.
+
+Conflict markers look like this:
+
+```text
+<<<<<<< HEAD
+your version
+=======
+other version
+>>>>>>> branch-name
+```
+
+These markers must be resolved before committing.
 
 ## Ask for help before committing when
 
-- GitHub Desktop lists files you did not intentionally change.
-- A test fails and you do not understand why.
-- GitHub Desktop reports a conflict.
-- You are unsure whether a generated or compiled file should be included.
-- The change modifies package behavior, dependencies, `NAMESPACE`, or `man/`.
-- The change is larger than the small task you intended to complete.
-- You are unsure whether committing directly to `main` is appropriate.
+* GitHub Desktop lists files you did not intentionally change.
+* A test fails and you do not understand why.
+* GitHub Desktop reports a conflict.
+* You are unsure whether a generated or compiled file should be included.
+* The change modifies package behavior, dependencies, `NAMESPACE`, or `man/`.
+* The change is larger than the small task you intended to complete.
+* You are unsure whether committing directly to `main` is appropriate.
 
-When asking for help, describe what you changed, what checks you ran, and what
-GitHub Desktop or RStudio shows.
+When asking for help, describe what you changed, what checks you ran, and what GitHub Desktop or RStudio shows.
+
+## Summary checklist
+
+Before pushing, check:
+
+```text
+[ ] I pulled the newest version before editing.
+[ ] I created a branch unless this was a very small agreed direct-to-main change.
+[ ] I made one focused change.
+[ ] I ran the relevant checks.
+[ ] I reviewed the diff in GitHub Desktop.
+[ ] I did not commit local/generated files.
+[ ] I wrote a clear commit message.
+[ ] I pushed my branch or agreed main commit.
+[ ] I opened a Pull Request if working on a branch.
+```
