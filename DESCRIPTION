@@ -1,0 +1,18 @@
+Package: qgsim
+Type: Package
+Title: Common Interfaces for Breeding-Scheme Simulation
+Version: 0.0.1
+Authors@R:
+    person("qgsim", "authors", role = c("aut", "cre"),
+           email = "qgsim@example.org")
+Description: Provides a small, backend-neutral specification, validation,
+    dispatch, and result layer for breeding-scheme simulation tools. The
+    initial release includes a pure R reference backend.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests:
+    devtools,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
