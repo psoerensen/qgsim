@@ -3,3 +3,15 @@
 .Ruserdata
 .Rproj.user/
 /AGENTS.md
+
+# Quarto / local documentation cache
+/.quarto/
+
+# Native build artifacts
+src/*.o
+src/*.obj
+src/*.dll
+src/*.so
+src/*.dylib
+src/*.lib
+src/*.exe
