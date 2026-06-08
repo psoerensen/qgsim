@@ -7,5 +7,5 @@
 
 ### Developer guides
 
-- [Optional shared-library backend
+- [Shared-library backend
   examples](https://psoerensen.github.io/qgsim/articles/shared-library-backends.md):

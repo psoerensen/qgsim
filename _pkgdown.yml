@@ -17,7 +17,7 @@ navbar:
 articles:
 - title: Collaborator guides
   contents:
-  - articles/github-desktop-workflow
+  - github-desktop-workflow
 - title: Developer guides
   contents:
-  - articles/shared-library-backends
+  - shared-library-backends

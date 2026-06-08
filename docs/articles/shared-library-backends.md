@@ -1,4 +1,4 @@
-# Optional shared-library backend examples
+# Shared-library backend examples
 
 qgsim can orchestrate simulation engines implemented outside R while
 keeping the common workflow:

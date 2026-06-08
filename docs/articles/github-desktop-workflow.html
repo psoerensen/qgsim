@@ -53,7 +53,7 @@
       <h1>Collaborator workflow with GitHub Desktop and RStudio</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/psoerensen/qgsim/blob/HEAD/vignettes/articles/github-desktop-workflow.Rmd" class="external-link"><code>vignettes/articles/github-desktop-workflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/psoerensen/qgsim/blob/HEAD/vignettes/github-desktop-workflow.Rmd" class="external-link"><code>vignettes/github-desktop-workflow.Rmd</code></a></small>
       <div class="d-none name"><code>github-desktop-workflow.Rmd</code></div>
     </div>
 
@@ -298,6 +298,79 @@ and what GitHub Desktop or RStudio shows.</p>
 [ ] I wrote a clear commit message.
 [ ] I pushed my branch or agreed main commit.
 [ ] I opened a Pull Request if working on a branch.</code></pre>
+</div>
+<div class="section level2">
+<h2 id="optional-same-workflow-with-standard-git-commands">Optional: same workflow with standard Git commands<a class="anchor" aria-label="anchor" href="#optional-same-workflow-with-standard-git-commands"></a>
+</h2>
+<p>Linux users, or collaborators who prefer the terminal, can follow the
+same safe workflow with standard Git commands.</p>
+<p>Run these commands in a terminal from the repository root. In
+RStudio, use the <strong>Terminal</strong> tab, not the R Console.</p>
+<div class="section level3">
+<h3 id="start-from-the-newest-version">Start from the newest version<a class="anchor" aria-label="anchor" href="#start-from-the-newest-version"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">git</span> pull</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="create-a-branch">Create a branch<a class="anchor" aria-label="anchor" href="#create-a-branch"></a>
+</h3>
+<p>Use a short branch name that describes the task:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> fix-readme-typo</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="edit-and-test">Edit and test<a class="anchor" aria-label="anchor" href="#edit-and-test"></a>
+</h3>
+<p>Edit files in RStudio or another editor.</p>
+<p>For package changes, run:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"devtools::load_all(); testthat::test_dir('tests/testthat')"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="review-changes">Review changes<a class="anchor" aria-label="anchor" href="#review-changes"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">git</span> diff</span></code></pre></div>
+<p>Make sure only intended files changed.</p>
+<p>Do not commit local or generated files such as:</p>
+<ul>
+<li><code>.Rproj.user/</code></li>
+<li><code>.Rhistory</code></li>
+<li><code>.RData</code></li>
+<li><code>.Ruserdata</code></li>
+<li><code>.quarto/</code></li>
+<li><code>AGENTS.md</code></li>
+<li>compiled artifacts such as <code>.dll</code>, <code>.so</code>,
+<code>.o</code>, <code>.obj</code>, <code>.lib</code>, and
+<code>.exe</code>
+</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="commit-the-change">Commit the change<a class="anchor" aria-label="anchor" href="#commit-the-change"></a>
+</h3>
+<p>Add only the files you intended to change:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Fix typo in README"</span></span></code></pre></div>
+<p>For multiple files, list them explicitly:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">git</span> add README.md vignettes/github-desktop-workflow.Rmd</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Update collaborator workflow"</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="push-the-branch">Push the branch<a class="anchor" aria-label="anchor" href="#push-the-branch"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin fix-readme-typo</span></code></pre></div>
+<p>Then open GitHub in a browser and create a Pull Request.</p>
+</div>
+<div class="section level3">
+<h3 id="do-not-use-these-commands-unless-you-know-exactly-why">Do not use these commands unless you know exactly why<a class="anchor" aria-label="anchor" href="#do-not-use-these-commands-unless-you-know-exactly-why"></a>
+</h3>
+<p>Beginners should avoid:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">--force</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">git</span> reset <span class="at">--hard</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">git</span> clean <span class="at">-fd</span></span></code></pre></div>
+<p>These commands can overwrite or delete work. Ask for help
+instead.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

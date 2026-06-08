@@ -50,10 +50,8 @@ Optional, compiler-dependent examples show how a backend can call a
 small shared library while preserving the `translate()`, `execute()`,
 and `collect()` stages:
 
-- [C++ shared-library
-  backend](https://psoerensen.github.io/qgsim/inst/examples/cpp_backend/README.md)
-- [Fortran shared-library
-  backend](https://psoerensen.github.io/qgsim/inst/examples/fortran_backend/README.md)
+- [Shared-library backend
+  guide](https://psoerensen.github.io/qgsim/articles/shared-library-backends.html)
 
 These are developer guidance only. They are not installed backends, are
 not scientifically complete simulators, and are not required by package

@@ -1,5 +1,5 @@
 ---
-title: "Optional shared-library backend examples"
+title: "Shared-library backend examples"
 ---
 
 qgsim can orchestrate simulation engines implemented outside R while keeping
