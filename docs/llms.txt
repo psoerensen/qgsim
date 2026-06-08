@@ -1,21 +1,15 @@
 # qgsim
 
-`qgsim` provides a small R-facing specification, validation, backend
-dispatch, and standardized result layer for breeding-scheme simulation
-tools.
-
-Version 0.0.1 includes one pure-R reference backend. It exists to
-establish and test the backend contract; it is not intended to be a
-scientifically complete breeding simulator.
+`qgsim` is a small teaching package for simulating multi-generational
+pedigrees.
 
 ## Install qgsim
 
-If you only want to use `qgsim`, install it from GitHub in R:
+Install the package from GitHub in R:
 
 ``` r
 install.packages("remotes")
 remotes::install_github("psoerensen/qgsim")
-library(qgsim)
 ```
 
 ## Example
@@ -23,124 +17,34 @@ library(qgsim)
 ``` r
 library(qgsim)
 
-scheme <- breeding_scheme(
+ped <- simulate_pedigree(
   generations = 3,
   population_size = 100,
   selected_parents = 20,
   offspring_per_mating = 5
 )
-
-plan <- qgsim_compile(
-  scheme = scheme,
-  seed = 123,
-  outputs = output_spec(
-    populations = TRUE,
-    metrics = "mean_breeding_value"
-  )
-)
-
-result <- qgsim_run(plan, backend = "r_reference")
-
-qgsim_metrics(result)
-qgsim_populations(result)
 ```
 
-The execution flow is deliberately explicit:
-
-``` text
-breeding_scheme() -> qgsim_compile() -> qgsim_validate()
-                  -> qgsim_run() -> qgsim_result
-```
-
-Future backend packages can translate the same validated plan for C++,
-Fortran, Python, or Julia implementations while returning the same
-result schema.
+The result is one data frame with individual IDs, parents, generation,
+and sex. Generation 1 contains founders with missing parents. Each later
+generation is produced from selected males and females in the previous
+generation.
 
 ## Documentation
 
-The package website is available at:
-
-<https://psoerensen.github.io/qgsim/>
-
-Useful articles:
-
+- [Package website](https://psoerensen.github.io/qgsim/)
 - [GitHub Desktop collaborator
   workflow](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html)
-- [Shared-library backend
-  guide](https://psoerensen.github.io/qgsim/articles/shared-library-backends.html)
 
-## Contributing to development
-
-If you want to contribute to `qgsim` development, clone the repository
-rather than only installing the package.
-
-On Linux or macOS, for example:
-
-``` bash
-mkdir -p ~/GitHub
-cd ~/GitHub
-git clone https://github.com/psoerensen/qgsim.git
-cd qgsim
-```
-
-After `cd qgsim`, you are in the repository root. This is the folder
-that contains files and folders such as:
-
-``` text
-DESCRIPTION
-README.md
-qgsim.Rproj
-R/
-tests/
-vignettes/
-```
-
-Run Git commands from this folder.
-
-On Windows, collaborators who prefer GitHub Desktop and RStudio can
-follow the [GitHub Desktop collaborator
-workflow](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html).
-
-For command-line Git workflows, the same article includes a short
-section with standard Git commands.
-
-## Developer examples
-
-Optional, compiler-dependent examples show how a backend can call a
-small shared library while preserving the `translate()`, `execute()`,
-and `collect()` stages:
-
-- [Shared-library backend
-  guide](https://psoerensen.github.io/qgsim/articles/shared-library-backends.html)
-
-These are developer guidance only. They are not installed backends, are
-not scientifically complete simulators, and are not required by package
-tests.
+This implementation is intentionally simple and intended for teaching.
+It is not a scientifically complete breeding simulator.
 
 # Package index
 
 ## All functions
 
-- [`breeding_scheme()`](https://psoerensen.github.io/qgsim/reference/breeding_scheme.md)
-  : Define a minimal breeding scheme
-- [`output_spec()`](https://psoerensen.github.io/qgsim/reference/output_spec.md)
-  : Define requested simulation outputs
-- [`qgsim_backend_info()`](https://psoerensen.github.io/qgsim/reference/qgsim_backend_info.md)
-  : Inspect a registered qgsim backend
-- [`qgsim_compile()`](https://psoerensen.github.io/qgsim/reference/qgsim_compile.md)
-  : Compile a breeding-scheme specification
-- [`qgsim_list_backends()`](https://psoerensen.github.io/qgsim/reference/qgsim_list_backends.md)
-  : List registered qgsim backends
-- [`qgsim_metrics()`](https://psoerensen.github.io/qgsim/reference/qgsim_metrics.md)
-  : Extract standardized simulation metrics
-- [`qgsim_populations()`](https://psoerensen.github.io/qgsim/reference/qgsim_populations.md)
-  : Extract standardized simulated populations
-- [`qgsim_register_backend()`](https://psoerensen.github.io/qgsim/reference/qgsim_register_backend.md)
-  : Register a qgsim simulation backend
-- [`qgsim_run()`](https://psoerensen.github.io/qgsim/reference/qgsim_run.md)
-  : Run a compiled breeding-scheme simulation
-- [`qgsim_validate()`](https://psoerensen.github.io/qgsim/reference/qgsim_validate.md)
-  : Validate a compiled qgsim plan
+- [`simulate_pedigree()`](https://psoerensen.github.io/qgsim/reference/simulate_pedigree.md)
+  : Simulate a multi-generational pedigree
 
 # Articles
 
@@ -148,8 +52,3 @@ tests.
 
 - [Collaborator workflow with GitHub Desktop and
   RStudio](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.md):
-
-### Developer guides
-
-- [Shared-library backend
-  examples](https://psoerensen.github.io/qgsim/articles/shared-library-backends.md):

@@ -1,8 +1,7 @@
 #' qgsim: Common Interfaces for Breeding-Scheme Simulation
 #'
-#' qgsim separates breeding-scheme specification from simulation execution.
-#' It compiles user inputs into a backend-neutral plan, dispatches that plan to
-#' a registered backend, and returns a standardized result.
+#' qgsim provides a small, teaching-friendly function for simulating
+#' multi-generational pedigrees.
 #'
 #' @keywords internal
 "_PACKAGE"

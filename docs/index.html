@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Common Interfaces for Breeding-Scheme Simulation • qgsim</title>
+<title>Simple Multi-Generational Pedigree Simulation • qgsim</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Common Interfaces for Breeding-Scheme Simulation">
-<meta name="description" content="Provides a small, backend-neutral specification, validation, dispatch, and result layer for breeding-scheme simulation tools. The initial release includes a pure R reference backend.">
-<meta property="og:description" content="Provides a small, backend-neutral specification, validation, dispatch, and result layer for breeding-scheme simulation tools. The initial release includes a pure R reference backend.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Simple Multi-Generational Pedigree Simulation">
+<meta name="description" content="Provides a small, teaching-friendly function for simulating multi-generational pedigrees from selected parents.">
+<meta property="og:description" content="Provides a small, teaching-friendly function for simulating multi-generational pedigrees from selected parents.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -49,16 +49,14 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="qgsim">qgsim<a class="anchor" aria-label="anchor" href="#qgsim"></a>
 </h1></div>
-<p><code>qgsim</code> provides a small R-facing specification, validation, backend dispatch, and standardized result layer for breeding-scheme simulation tools.</p>
-<p>Version 0.0.1 includes one pure-R reference backend. It exists to establish and test the backend contract; it is not intended to be a scientifically complete breeding simulator.</p>
+<p><code>qgsim</code> is a small teaching package for simulating multi-generational pedigrees.</p>
 <div class="section level2">
 <h2 id="install-qgsim">Install qgsim<a class="anchor" aria-label="anchor" href="#install-qgsim"></a>
 </h2>
-<p>If you only want to use <code>qgsim</code>, install it from GitHub in R:</p>
+<p>Install the package from GitHub in R:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"psoerensen/qgsim"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psoerensen.github.io/qgsim/">qgsim</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"psoerensen/qgsim"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -66,70 +64,22 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psoerensen.github.io/qgsim/">qgsim</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">scheme</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/breeding_scheme.html">breeding_scheme</a></span><span class="op">(</span></span>
+<span><span class="va">ped</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_pedigree.html">simulate_pedigree</a></span><span class="op">(</span></span>
 <span>  generations <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  population_size <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  selected_parents <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  offspring_per_mating <span class="op">=</span> <span class="fl">5</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">plan</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/qgsim_compile.html">qgsim_compile</a></span><span class="op">(</span></span>
-<span>  scheme <span class="op">=</span> <span class="va">scheme</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
-<span>  outputs <span class="op">=</span> <span class="fu"><a href="reference/output_spec.html">output_spec</a></span><span class="op">(</span></span>
-<span>    populations <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    metrics <span class="op">=</span> <span class="st">"mean_breeding_value"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/qgsim_run.html">qgsim_run</a></span><span class="op">(</span><span class="va">plan</span>, backend <span class="op">=</span> <span class="st">"r_reference"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/qgsim_metrics.html">qgsim_metrics</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/qgsim_populations.html">qgsim_populations</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
-<p>The execution flow is deliberately explicit:</p>
-<pre class="text"><code>breeding_scheme() -&gt; qgsim_compile() -&gt; qgsim_validate()
-                  -&gt; qgsim_run() -&gt; qgsim_result</code></pre>
-<p>Future backend packages can translate the same validated plan for C++, Fortran, Python, or Julia implementations while returning the same result schema.</p>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The result is one data frame with individual IDs, parents, generation, and sex. Generation 1 contains founders with missing parents. Each later generation is produced from selected males and females in the previous generation.</p>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>The package website is available at:</p>
-<p><a href="https://psoerensen.github.io/qgsim/" class="uri">https://psoerensen.github.io/qgsim/</a></p>
-<p>Useful articles:</p>
 <ul>
+<li><a href="https://psoerensen.github.io/qgsim/">Package website</a></li>
 <li><a href="https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html">GitHub Desktop collaborator workflow</a></li>
-<li><a href="https://psoerensen.github.io/qgsim/articles/shared-library-backends.html">Shared-library backend guide</a></li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="contributing-to-development">Contributing to development<a class="anchor" aria-label="anchor" href="#contributing-to-development"></a>
-</h2>
-<p>If you want to contribute to <code>qgsim</code> development, clone the repository rather than only installing the package.</p>
-<p>On Linux or macOS, for example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/GitHub</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="bu">cd</span> ~/GitHub</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/psoerensen/qgsim.git</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="bu">cd</span> qgsim</span></code></pre></div>
-<p>After <code>cd qgsim</code>, you are in the repository root. This is the folder that contains files and folders such as:</p>
-<pre class="text"><code>DESCRIPTION
-README.md
-qgsim.Rproj
-R/
-tests/
-vignettes/</code></pre>
-<p>Run Git commands from this folder.</p>
-<p>On Windows, collaborators who prefer GitHub Desktop and RStudio can follow the <a href="https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html">GitHub Desktop collaborator workflow</a>.</p>
-<p>For command-line Git workflows, the same article includes a short section with standard Git commands.</p>
-</div>
-<div class="section level2">
-<h2 id="developer-examples">Developer examples<a class="anchor" aria-label="anchor" href="#developer-examples"></a>
-</h2>
-<p>Optional, compiler-dependent examples show how a backend can call a small shared library while preserving the <code>translate()</code>, <code>execute()</code>, and <code>collect()</code> stages:</p>
-<ul>
-<li><a href="https://psoerensen.github.io/qgsim/articles/shared-library-backends.html">Shared-library backend guide</a></li>
-</ul>
-<p>These are developer guidance only. They are not installed backends, are not scientifically complete simulators, and are not required by package tests.</p>
+<p>This implementation is intentionally simple and intended for teaching. It is not a scientifically complete breeding simulator.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

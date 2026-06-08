@@ -3,19 +3,3 @@
 .Ruserdata
 .Rproj.user/
 /AGENTS.md
-
-# Optional shared-library developer examples
-inst/examples/cpp_backend/*.o
-inst/examples/cpp_backend/*.obj
-inst/examples/cpp_backend/*.so
-inst/examples/cpp_backend/*.dll
-inst/examples/cpp_backend/*.dylib
-inst/examples/cpp_backend/*.lib
-inst/examples/cpp_backend/*.exe
-inst/examples/fortran_backend/*.o
-inst/examples/fortran_backend/*.obj
-inst/examples/fortran_backend/*.so
-inst/examples/fortran_backend/*.dll
-inst/examples/fortran_backend/*.dylib
-inst/examples/fortran_backend/*.lib
-inst/examples/fortran_backend/*.exe

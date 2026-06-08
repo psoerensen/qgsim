@@ -18,6 +18,3 @@ articles:
 - title: Collaborator guides
   contents:
   - github-desktop-workflow
-- title: Developer guides
-  contents:
-  - shared-library-backends

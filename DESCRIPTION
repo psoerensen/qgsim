@@ -1,13 +1,12 @@
 Package: qgsim
 Type: Package
-Title: Common Interfaces for Breeding-Scheme Simulation
+Title: Simple Multi-Generational Pedigree Simulation
 Version: 0.0.1
 Authors@R:
     person("qgsim", "authors", role = c("aut", "cre"),
            email = "qgsim@example.org")
-Description: Provides a small, backend-neutral specification, validation,
-    dispatch, and result layer for breeding-scheme simulation tools. The
-    initial release includes a pure R reference backend.
+Description: Provides a small, teaching-friendly function for simulating
+    multi-generational pedigrees from selected parents.
 License: MIT + file LICENSE
 URL: https://psoerensen.github.io/qgsim/,
     https://github.com/psoerensen/qgsim
