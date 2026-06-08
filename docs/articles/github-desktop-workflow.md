@@ -225,8 +225,51 @@ Before pushing, check:
 Linux users, or collaborators who prefer the terminal, can follow the
 same safe workflow with standard Git commands.
 
-Run these commands in a terminal from the repository root. In RStudio,
-use the **Terminal** tab, not the R Console.
+Run these commands in a terminal opened in your local `qgsim` repository
+folder.
+
+The local `qgsim` repository folder is the folder you cloned from
+GitHub. It is the top-level folder that contains files and folders such
+as:
+
+``` text
+DESCRIPTION
+README.md
+qgsim.Rproj
+R/
+tests/
+vignettes/
+```
+
+For example, on Linux this might be:
+
+``` text
+~/GitHub/qgsim
+```
+
+On Windows this might be:
+
+``` text
+C:/Users/<your-user-name>/Documents/GitHub/qgsim
+```
+
+In RStudio, open `qgsim.Rproj` first. Then use the **Terminal** tab, not
+the R Console. The Terminal will usually start in the correct `qgsim`
+folder.
+
+You can check that you are in the right folder by running:
+
+``` bash
+pwd
+```
+
+On Windows PowerShell, you can also run:
+
+``` powershell
+Get-Location
+```
+
+You should see a path ending in `qgsim`.
 
 ### Start from the newest version
 
