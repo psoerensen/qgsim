@@ -10,6 +10,15 @@ qgsim separates breeding-scheme specification from simulation execution.
 It compiles user inputs into a backend-neutral plan, dispatches that plan to
 a registered backend, and returns a standardized result.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://psoerensen.github.io/qgsim/}
+  \item \url{https://github.com/psoerensen/qgsim}
+  \item Report bugs at \url{https://github.com/psoerensen/qgsim/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: qgsim authors \email{qgsim@example.org}
 

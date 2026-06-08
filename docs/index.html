@@ -51,7 +51,19 @@
 </h1></div>
 <p><code>qgsim</code> provides a small R-facing specification, validation, backend dispatch, and standardized result layer for breeding-scheme simulation tools.</p>
 <p>Version 0.0.1 includes one pure-R reference backend. It exists to establish and test the backend contract; it is not intended to be a scientifically complete breeding simulator.</p>
+<div class="section level2">
+<h2 id="install-qgsim">Install qgsim<a class="anchor" aria-label="anchor" href="#install-qgsim"></a>
+</h2>
+<p>If you only want to use <code>qgsim</code>, install it from GitHub in R:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"psoerensen/qgsim"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psoerensen.github.io/qgsim/">qgsim</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psoerensen.github.io/qgsim/">qgsim</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">scheme</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/breeding_scheme.html">breeding_scheme</a></span><span class="op">(</span></span>
@@ -78,6 +90,38 @@
 <pre class="text"><code>breeding_scheme() -&gt; qgsim_compile() -&gt; qgsim_validate()
                   -&gt; qgsim_run() -&gt; qgsim_result</code></pre>
 <p>Future backend packages can translate the same validated plan for C++, Fortran, Python, or Julia implementations while returning the same result schema.</p>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>The package website is available at:</p>
+<p><a href="https://psoerensen.github.io/qgsim/" class="uri">https://psoerensen.github.io/qgsim/</a></p>
+<p>Useful articles:</p>
+<ul>
+<li><a href="https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html">GitHub Desktop collaborator workflow</a></li>
+<li><a href="https://psoerensen.github.io/qgsim/articles/shared-library-backends.html">Shared-library backend guide</a></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="contributing-to-development">Contributing to development<a class="anchor" aria-label="anchor" href="#contributing-to-development"></a>
+</h2>
+<p>If you want to contribute to <code>qgsim</code> development, clone the repository rather than only installing the package.</p>
+<p>On Linux or macOS, for example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/GitHub</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="bu">cd</span> ~/GitHub</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/psoerensen/qgsim.git</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="bu">cd</span> qgsim</span></code></pre></div>
+<p>After <code>cd qgsim</code>, you are in the repository root. This is the folder that contains files and folders such as:</p>
+<pre class="text"><code>DESCRIPTION
+README.md
+qgsim.Rproj
+R/
+tests/
+vignettes/</code></pre>
+<p>Run Git commands from this folder.</p>
+<p>On Windows, collaborators who prefer GitHub Desktop and RStudio can follow the <a href="https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html">GitHub Desktop collaborator workflow</a>.</p>
+<p>For command-line Git workflows, the same article includes a short section with standard Git commands.</p>
+</div>
 <div class="section level2">
 <h2 id="developer-examples">Developer examples<a class="anchor" aria-label="anchor" href="#developer-examples"></a>
 </h2>
@@ -86,7 +130,6 @@
 <li><a href="https://psoerensen.github.io/qgsim/articles/shared-library-backends.html">Shared-library backend guide</a></li>
 </ul>
 <p>These are developer guidance only. They are not installed backends, are not scientifically complete simulators, and are not required by package tests.</p>
-<p>Collaborators who prefer GitHub Desktop and RStudio can follow the <a href="https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html">GitHub Desktop collaborator workflow</a>, which is also published with the pkgdown articles.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

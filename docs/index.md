@@ -8,6 +8,18 @@ Version 0.0.1 includes one pure-R reference backend. It exists to
 establish and test the backend contract; it is not intended to be a
 scientifically complete breeding simulator.
 
+## Install qgsim
+
+If you only want to use `qgsim`, install it from GitHub in R:
+
+``` r
+install.packages("remotes")
+remotes::install_github("psoerensen/qgsim")
+library(qgsim)
+```
+
+## Example
+
 ``` r
 library(qgsim)
 
@@ -44,6 +56,54 @@ Future backend packages can translate the same validated plan for C++,
 Fortran, Python, or Julia implementations while returning the same
 result schema.
 
+## Documentation
+
+The package website is available at:
+
+<https://psoerensen.github.io/qgsim/>
+
+Useful articles:
+
+- [GitHub Desktop collaborator
+  workflow](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html)
+- [Shared-library backend
+  guide](https://psoerensen.github.io/qgsim/articles/shared-library-backends.html)
+
+## Contributing to development
+
+If you want to contribute to `qgsim` development, clone the repository
+rather than only installing the package.
+
+On Linux or macOS, for example:
+
+``` bash
+mkdir -p ~/GitHub
+cd ~/GitHub
+git clone https://github.com/psoerensen/qgsim.git
+cd qgsim
+```
+
+After `cd qgsim`, you are in the repository root. This is the folder
+that contains files and folders such as:
+
+``` text
+DESCRIPTION
+README.md
+qgsim.Rproj
+R/
+tests/
+vignettes/
+```
+
+Run Git commands from this folder.
+
+On Windows, collaborators who prefer GitHub Desktop and RStudio can
+follow the [GitHub Desktop collaborator
+workflow](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html).
+
+For command-line Git workflows, the same article includes a short
+section with standard Git commands.
+
 ## Developer examples
 
 Optional, compiler-dependent examples show how a backend can call a
@@ -56,8 +116,3 @@ and `collect()` stages:
 These are developer guidance only. They are not installed backends, are
 not scientifically complete simulators, and are not required by package
 tests.
-
-Collaborators who prefer GitHub Desktop and RStudio can follow the
-[GitHub Desktop collaborator
-workflow](https://psoerensen.github.io/qgsim/articles/github-desktop-workflow.html),
-which is also published with the pkgdown articles.
